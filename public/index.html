@@ -5,21 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+
+  <style>
+
+     html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+
+  </style>
 </head>
 <body>
   <h1>Socket.io number random</h1>
+  <div id="map"></div>
   <script src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript">
-    //es2015
-    var socket = io();
-    //enviando un numero random cada dos segundos
-    /*setInterval(function(){
-      socket.emit('client/random', Math.random())
-    }, 2000);*/
-    //recibiendo un numero random cada dos segundos
-    socket.on('tracking', function(data){
-      console.log(JSON.stringify(data));
-    });
-  </script>
+  <script src="map.js"></script>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6Dkzm9xw3-0HSgt293cvZzrfS3eoojgM&callback=initMap" async defer></script>
 </body>
 </html>
