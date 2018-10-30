@@ -47,8 +47,8 @@ var sockets = [];
          var altitude = res[12];
          var date = new Date();
 
-         var lat =  parseFloat(parseInt(latitude.substring(0,2))+parseFloat(latitude.substring(2,latitude.length))/60);
-	     var long  =   parseFloat(parseInt(longitude.substring(0,3))+parseFloat(longitude.substring(2,longitude.length))/60);
+         var lat =  parseFloat(parseInt(latitude.substring(0,2))+parseFloat(latitude.substring(2,latitude.length))/60).toFixed(5);
+	     var long  =   parseFloat(parseInt(longitude.substring(0,3))+parseFloat(longitude.substring(2,longitude.length))/60).toFixed(5);
          long = -long;
 
          /*console.log("IMEI: "+devid+" msg: "+msg+" fecha: "+devdate+" adminnum: "+admin_num+" info: "+info+
