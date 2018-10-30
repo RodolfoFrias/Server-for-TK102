@@ -18,9 +18,9 @@ console.log("Setting up mysql connection..")
 
 var dbPool = mysql.createPool({
     host: '127.0.0.1',
-    database: 'web_iustar',
+    database: 'bd',
     user: 'root',
-    password: '',
+    password: 'root',
     port: 3306,
     connectionLimit: 5
 });
