@@ -7,8 +7,8 @@ window.addEventListener('load', function(){
        map = new google.maps.Map(document.getElementById('map'), {
       zoom: 15,
       center: {
-        lat:20.634331500000002  ,
-        lng: -100.42484566666667
+        lat: ,
+        lng: 
       }
     });
     
