@@ -1,14 +1,16 @@
-var mysql = require('mysql');
-var http = require('http');
+//Este código no se ocupa.
 
-var portNum = 8080;
+const mysql = require('mysql');
+const http = require('http');
+
+const portNum = 8080;
 
 var NodeGeocoder = require('node-geocoder');
 var options = {
     provider: 'google',
     // Optional depending on the providers
     httpAdapter: 'https', // Default
-    apiKey: 'AIzaSyD6Dkzm9xw3-0HSgt293cvZzrfS3eoojgM', // for Mapquest, OpenCage, Google Premier
+    apiKey: 'api-key', // for Mapquest, OpenCage, Google Premier
     formatter: null         // 'gpx', 'string', ...
 };
 
@@ -18,7 +20,7 @@ console.log("Setting up mysql connection..")
 
 var dbPool = mysql.createPool({
     host: '127.0.0.1',
-    database: 'web_iustar',
+    database: 'db',
     user: 'root',
     password: '',
     port: 3306,
@@ -44,7 +46,7 @@ dbPool.getConnection(function (err, connection) {
 
 function saveDb(id, latitude, longitude, gpstime) {
     console.log('saveDb');
- 
+
         geocoder.reverse({ lat: latitude, lon: longitude })
             .then(function (res) {
                 //console.log('Dir' + res[0].formattedAddress);
@@ -56,7 +58,7 @@ function saveDb(id, latitude, longitude, gpstime) {
 
                     console.log("JSON: " + results);
                     console.log(" RES -> " + results[0]['LAT'] + " " + results[0]['LON']);
-                    
+
                     if (results[0]['DIRECCION'] !== res[0].formattedAddress.replace(/["']/g, "")) {
                         console.log('DIFERENTES ');
                         dbPool.query('INSERT INTO devices(NUM ,IMEI, LAT, LON,DIRECCION, FECHA) values("' + null + '","' + id + '","' + latitude + '","' + longitude + '","' + res[0].formattedAddress.replace(/["']/g, "") + '","' + gpstime + '")',
@@ -66,7 +68,7 @@ function saveDb(id, latitude, longitude, gpstime) {
                                     throw err;
                                 }
                                 console.log('OK ');
-                                         
+
                                 return "OK";
                             });
                     } else {
@@ -80,7 +82,7 @@ function saveDb(id, latitude, longitude, gpstime) {
             });
 
         // http.emit( 'data', gps )
-    
+
 
 }
 

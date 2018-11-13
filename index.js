@@ -1,8 +1,8 @@
-var net = require('net');
-var HOST = '192.168.15.7';
-var PORT = 2345;
-var util = require('./util');
-var index = require('./js/index')
+const net = require('net');
+const HOST = '192.168.15.7';
+const PORT = 2345;
+const util = require('./util');
+const index = require('./js/index')
 global.data = {};
 
 net.createServer(function(sock) {
@@ -27,7 +27,7 @@ var sockets = [];
         var comdevid = res[0].toString().split(":");
         var devid = comdevid[1];
         sock.write('ON');
-        console.log('ON Sended'); 
+        console.log('ON Sended');
     }
     else if(data.toString().match(devid)){
         var res = data.toString().split(",");
@@ -48,7 +48,7 @@ var sockets = [];
          var date = new Date();
 
          var lat =  parseFloat(parseInt(latitude.substring(0,2))+parseFloat(latitude.substring(2,latitude.length))/60).toFixed(5);
-	     var long  =   parseFloat(parseInt(longitude.substring(0,3))+parseFloat(longitude.substring(2,longitude.length))/60).toFixed(5);
+	       var long  =   parseFloat(parseInt(longitude.substring(0,3))+parseFloat(longitude.substring(2,longitude.length))/60).toFixed(5);
          long = -long;
 
          /*console.log("IMEI: "+devid+" msg: "+msg+" fecha: "+devdate+" adminnum: "+admin_num+" info: "+info+
@@ -63,17 +63,13 @@ var sockets = [];
             }
             console.log(data);
 
-   
         //util.saveDb(devid,lat,long,date );
-
-         //If we receive a SOS we cancel the repeat mode
+      
          if(msg=="help me"){
             sock.write('**,'+res[0]+',E');
             console.log('SOS repeat disabled');
          }
         }
-       
-        
 });
 
 
@@ -104,5 +100,3 @@ index.io.on('connection', function(socket){
       console.log(num);
     });
 });
-
-
