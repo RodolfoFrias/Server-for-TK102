@@ -11,8 +11,8 @@ window.addEventListener('load', function(){
         lng: -100.415529613,
       }
     });
-    
   }
+
   initMap();
 
   //es2015
@@ -24,23 +24,22 @@ window.addEventListener('load', function(){
   //recibiendo un numero random cada dos segundos
   socket.on('tracking', function(data){
           
-  console.log(data);
-  var location =  JSON.parse(JSON.stringify(data));
-  console.log(location.lat + " " + location.lon)
-  var fenway = {
-     lat: parseFloat(location.lat),
-     lng: parseFloat(location.lon) 
-    };
+    console.log(data);
+    var location =  JSON.parse(JSON.stringify(data));
+    console.log(location.lat + " " + location.lon)
+    var fenway = {
+      lat: parseFloat(location.lat),
+      lng: parseFloat(location.lon) 
+      };
 
-  var marker = new google.maps.Marker({
-    position: fenway,
-    title:"Hello World!"
-  });
+    var marker = new google.maps.Marker({
+      position: fenway,
+      title:"Hello World!"
+    });
 
-  setInterval(function(){
-    marker.setMap(null);
-    marker.setMap(map);
-  }, 5000);
+    setInterval(function(){
+      marker.setMap(map);
+    }, 5000);
     
   });
 
