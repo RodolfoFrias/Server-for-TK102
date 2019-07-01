@@ -2,11 +2,11 @@
   "name": "Server-for-TK102",
   "version": "1.0.0",
   "description": "Basic server using NodeJs, Express and Socket io for tracker TK102",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "nodemon index.js",
-    "start": "node index.js"
+    "start-dev": "nodemon src/app.js",
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
