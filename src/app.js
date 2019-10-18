@@ -19,50 +19,51 @@ app.use(express.static(path.join(__dirname, '/public')))//middleware de express 
 
 const parseData = require('./controllers/configGPS');
 
-net.createServer(function(sock) {
+net.createServer(function (sock) {
 
-console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
+    console.log('CONNECTED: ' + sock.remoteAddress + ':' + sock.remotePort);
 
-const sockets = [];
-const gpsData = {};
+    let sockets = [];
+    let gpsData = {};
 
-sock.on('data', function(data) {
-    console.log("DATA: "+data)
-    sockets.push(sock);
+    sock.on('data', function (data) {
+        console.log("DATA: " + data)
+        sockets.push(sock);
 
-    gpsData = parseData(data);
+        gpsData = parseData(data);
 
-    console.log(gpsData);
+        console.log(gpsData);
 
-    //util.saveDb(devid,lat,long,date );
-      
-});
+        //util.saveDb(devid,lat,long,date );
+    });
 
+    
+    io.on('connection', function (socket) {
+        socket.emit('tracking', gpsData);
+    });
 
-sock.on('close', function(data){
-    let index = sockets.findIndex(function(o) {
-        return o.remoteAddress === sock.remoteAddress && o.remotePort === sock.remotePort;
-    })
-    if (index !== -1) sockets.splice(index, 1);
-    console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
-});
+    sock.on('close', function (data) {
+        let index = sockets.findIndex(function (o) {
+            return o.remoteAddress === sock.remoteAddress && o.remotePort === sock.remotePort;
+        })
+        if (index !== -1) sockets.splice(index, 1);
+        console.log('CLOSED: ' + sock.remoteAddress + ' ' + sock.remotePort);
+    });
 
-}).listen(tcpPORT, HOST, function(){
-    console.log("listening on port: "+tcpPORT+" and host: "+HOST);
+}).listen(tcpPORT, HOST, function () {
+    console.log("listening on port: " + tcpPORT + " and host: " + HOST);
 });
 
 server.listen(webPORT, () => {
     console.log(`Server running in http://localhost:${webPORT}`)
- });
+});
 
-io.on('connection', function(socket){
+//Esto es para prueba
+io.on('connection', function (socket) {
     console.log(`client: ${socket.id}`)
-    //enviando numero aleatorio cada dos segundo al cliente
+ 
     setInterval(() => {
-      socket.emit('tracking', 'imei:864894030211644,tracker,181115173729,,F,223730.00,A,2040.96714,N,10026.08774,W,,;')
+        socket.emit('tracking', 'imei:864894030211644,tracker,181115173729,,F,223730.00,A,2040.96714,N,10026.08774,W,,;')
     }, 5000);
-    //recibiendo el numero aleatorio del cliente
-    socket.on('client/random', (num) => {
-      console.log(num);
-    });
+
 });

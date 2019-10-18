@@ -47,43 +47,39 @@ dbPool.getConnection(function (err, connection) {
 function saveDb(id, latitude, longitude, gpstime) {
     console.log('saveDb');
 
-        geocoder.reverse({ lat: latitude, lon: longitude })
-            .then(function (res) {
-                //console.log('Dir' + res[0].formattedAddress);
-                //.log('INSERT INTO devices(NUM ,IMEI, LAT, LON,DIRECCION, FECHA) values("'+null+'","'+id+'","'+latitude+'","'+longitude+'","'+res[0].formattedAddress+'","'+gpstime+'")');
+    geocoder.reverse({ lat: latitude, lon: longitude })
+        .then(function (res) {
+            
+            let consulta = "SELECT * FROM devices ORDER BY FECHA DESC limit 1";
+            var cl = dbPool.query(consulta, function (err, results, fields) {
+                if (err) return false;
 
-                let consulta = "SELECT * FROM devices ORDER BY FECHA DESC limit 1";
-                var cl = dbPool.query(consulta, function (err, results, fields) {
-                    if (err) return false;
+                console.log("JSON: " + results);
+                console.log(" RES -> " + results[0]['LAT'] + " " + results[0]['LON']);
 
-                    console.log("JSON: " + results);
-                    console.log(" RES -> " + results[0]['LAT'] + " " + results[0]['LON']);
+                if (results[0]['DIRECCION'] !== res[0].formattedAddress.replace(/["']/g, "")) {
+                    console.log('DIFERENTES ');
+                    dbPool.query('INSERT INTO devices(NUM ,IMEI, LAT, LON,DIRECCION, FECHA) values("' + null + '","' + id + '","' + latitude + '","' + longitude + '","' + res[0].formattedAddress.replace(/["']/g, "") + '","' + gpstime + '")',
+                        function (err, rows, fields) {
+                            if (err) {
+                                console.log('error 2:: ' + err);
+                                throw err;
+                            }
+                            console.log('OK ');
 
-                    if (results[0]['DIRECCION'] !== res[0].formattedAddress.replace(/["']/g, "")) {
-                        console.log('DIFERENTES ');
-                        dbPool.query('INSERT INTO devices(NUM ,IMEI, LAT, LON,DIRECCION, FECHA) values("' + null + '","' + id + '","' + latitude + '","' + longitude + '","' + res[0].formattedAddress.replace(/["']/g, "") + '","' + gpstime + '")',
-                            function (err, rows, fields) {
-                                if (err) {
-                                    console.log('error 2:: ' + err);
-                                    throw err;
-                                }
-                                console.log('OK ');
-
-                                return "OK";
-                            });
-                    } else {
-                        console.log('IGUAL ');
-                    }
-                });
-
-            })
-            .catch(function (err) {
-                console.log("ERROR: " + err);
+                            return "OK";
+                        });
+                } else {
+                    console.log('IGUAL ');
+                }
             });
 
-        // http.emit( 'data', gps )
+        })
+        .catch(function (err) {
+            console.log("ERROR: " + err);
+        });
 
-
+    // http.emit( 'data', gps )
 }
 
 module.exports = {
